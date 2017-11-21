@@ -1,4 +1,4 @@
-package com.bookgui.entity;
+package com.bookgui.book;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -5,9 +5,9 @@
  */
 package com.bookgui.form;
 
-import com.bookgui.bookdao.BookDao;
-import com.bookgui.entity.Book;
-import com.bookgui.validation.BookValidator;
+import com.bookgui.book.BookDao;
+import com.bookgui.book.Book;
+import com.bookgui.book.BookValidator;
 import java.awt.event.ItemEvent;
 import java.util.List;
 import javax.swing.JOptionPane;

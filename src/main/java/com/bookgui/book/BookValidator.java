@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.bookgui.validation;
+package com.bookgui.book;
 
-import com.bookgui.entity.Book;
+import com.bookgui.book.Book;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.PostConstruct;
