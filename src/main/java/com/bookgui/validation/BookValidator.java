@@ -44,12 +44,12 @@ public class BookValidator {
             Set<String> violationMessages = new HashSet<>();
 
             constraintViolations.forEach((constraintViolation) -> {
-                violationMessages.add(constraintViolation.getPropertyPath() +
-                    ": " + constraintViolation.getMessage());
+                violationMessages.add(constraintViolation.getPropertyPath()
+                    + ": " + constraintViolation.getMessage());
             });
 
-            throw new RuntimeException("Book is not valid:\n" + 
-                StringUtils.join(violationMessages, "\n"));
+            throw new RuntimeException("Book is not valid:\n"
+                + StringUtils.join(violationMessages, "\n"));
         }
     }
 }

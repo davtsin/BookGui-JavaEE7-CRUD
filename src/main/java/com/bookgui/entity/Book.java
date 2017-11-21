@@ -8,6 +8,7 @@ import javax.persistence.NamedQuery;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -26,13 +27,26 @@ public class Book {
     @Id
     @GeneratedValue
     private Long id;
-    @Size(min = 1, max = 500, message = "title must be in range {min}-{max} symbols")
+    @Size(min = 1, max = 500, message = "Title must be in range {min}-{max} symbols")
     private String title;
     @NotNull
-    @Digits(integer = 6, fraction = 2, message = "price must have the same format: '{integer}'.'{fraction}' digits")
+    @Digits(integer = 6, fraction = 2, message = "Price must have the same format: "
+        + "'{integer}'.'{fraction}' digits")
     private Float price;
-    @Size(min = 10, max = 2000, message = "description must be in range {min}-{max} symbols")
+    @Size(min = 10, max = 2000, message = "Description must be in range {min}-{max} symbols")
     private String description;
+//    @Size(min = 1, max = 20, message = "isbn must be in range {min}-{max} symbols")
+    @Pattern(regexp = "^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ])"
+        + "{3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)"
+        + "(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$",
+        message = "Incorrect isbn\n"
+        + "Correct examples:\n"
+        + "ISBN 978-0-596-52068-7\n"
+        + "ISBN-13: 978-0-596-52068-7\n"
+        + "978 0 596 52068 7\n"
+        + "9780596520687\n"
+        + "ISBN-10 0-596-52068-9\n"
+        + "0-596-52068-9")
     private String isbn;
     @Max(value = 100000, message = "number of pages should not be over {value}")
     @NotNull
