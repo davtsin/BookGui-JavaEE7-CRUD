@@ -7,8 +7,10 @@ package com.bookgui.form;
 
 import com.bookgui.bookdao.BookDao;
 import com.bookgui.entity.Book;
+import com.bookgui.validation.BookValidator;
 import java.awt.event.ItemEvent;
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 
@@ -24,6 +26,7 @@ public class BookGuiForm extends javax.swing.JFrame {
     private Weld weld;
     private WeldContainer container;
     private BookDao bookDao;
+    private BookValidator bookValidator;
 
     public BookGuiForm() {
         initComponents();
@@ -39,7 +42,18 @@ public class BookGuiForm extends javax.swing.JFrame {
         weld = new Weld();
         container = weld.initialize();
         bookDao = container.instance().select(BookDao.class).get();
+        bookValidator = container.instance().select(BookValidator.class).get();
         setUpdateGuiMode(false);
+        jTextField1.setText("Тихий Дон. Книги 1, 2");
+        jTextField2.setText("Роман-эпопея");
+        int priceLimit = 10;
+        jTextField3.setDocument(new JTextFieldLimit(priceLimit));
+        jTextField3.setText("349");
+        jTextField4.setText("978-5-699-13254-6");
+        int nbOfPageLimit = 9;
+        jTextField5.setDocument(new JTextFieldLimit(nbOfPageLimit));
+        jTextField5.setText("720");
+        jTextField6.setText("false");
     }
 
     @SuppressWarnings("unchecked")
@@ -93,16 +107,6 @@ public class BookGuiForm extends javax.swing.JFrame {
         jLabel5.setText("Number of pages");
 
         jLabel6.setText("Illustrations");
-
-        jTextField1.setText("Тихий Дон");
-
-        jTextField2.setText("Роман-эпопея");
-
-        jTextField3.setText("12.5");
-
-        jTextField4.setText("978-5-358-03028-2");
-
-        jTextField5.setText("777");
 
         jTextField6.setText("false");
 
@@ -301,12 +305,17 @@ public class BookGuiForm extends javax.swing.JFrame {
 
     private Book readDataFromTextFields() {
         Book book = new Book();
-        book.setTitle(jTextField1.getText());
-        book.setDescription(jTextField2.getText());
-        book.setPrice(Float.valueOf(jTextField3.getText()));
-        book.setIsbn(jTextField4.getText());
-        book.setNbOfPage(Integer.valueOf(jTextField5.getText()));
-        book.setIllustrations(Boolean.valueOf(jTextField6.getText()));
+        try {
+            book.setTitle(jTextField1.getText());
+            book.setDescription(jTextField2.getText());
+            book.setPrice(Float.valueOf(jTextField3.getText()));
+            book.setIsbn(jTextField4.getText());
+            book.setNbOfPage(Integer.valueOf(jTextField5.getText()));
+            book.setIllustrations(Boolean.valueOf(jTextField6.getText()));
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "all fields must have a value");
+        }
         return book;
     }
 
@@ -314,14 +323,19 @@ public class BookGuiForm extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         Book book = readDataFromTextFields();
-        bookDao.createBook(book);
+        try {
+            bookValidator.validateBook(book);
+            bookDao.createBook(book);
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
         showDatabase();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
         weld.shutdown();
-        System.out.println("weld shutdown - ok");
+        System.out.println("weld shutdown");
     }//GEN-LAST:event_formWindowClosing
 
     private void showDatabase() {

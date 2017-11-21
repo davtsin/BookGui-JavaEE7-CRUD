@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -25,13 +26,16 @@ public class Book {
     @Id
     @GeneratedValue
     private Long id;
-    @NotNull
+    @Size(min = 1, max = 500, message = "title must be in range {min}-{max} symbols")
     private String title;
-    @Digits(integer=6, fraction=2)
+    @NotNull
+    @Digits(integer = 6, fraction = 2, message = "price must have the same format: '{integer}'.'{fraction}' digits")
     private Float price;
-    @Size(min = 10, max = 2000)
+    @Size(min = 10, max = 2000, message = "description must be in range {min}-{max} symbols")
     private String description;
     private String isbn;
+    @Max(value = 100000, message = "number of pages should not be over {value}")
+    @NotNull
     private Integer nbOfPage;
     private Boolean illustrations;
 
